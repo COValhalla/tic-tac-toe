@@ -1,0 +1,39 @@
+:root {
+    --boardBorder: 4px solid black;
+  }
+  
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: black 2px  ;
+    box-sizing: border-box;
+}
+
+.container {
+    padding: 30px;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.gameDetails {
+    grid-column: 1/4;
+    background-color: red;
+    border: solid;
+    margin-bottom: 10px;
+}
+
+.block1, .block2, .block4, .block5 {
+    border-bottom: var(--boardBorder);
+    border-right: var(--boardBorder);
+}
+.block3, .block6 {
+    border-bottom: var(--boardBorder);
+}
+
+.block7, .block8 {
+    border-right: var(--boardBorder);
+}
