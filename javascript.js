@@ -2,11 +2,10 @@
 // Gameboard grid will be stored as an array inside of a gameboard object
 const gameboard = (() => {
     // let gameArray = Array(8);
-    let _gameArray = ['X', 'O','X','4','O','X','7','O','X'];
+    let _gameArray = ['', '','','','','','','',''];
 
     const drawBoard = () => {
         _gameArray.forEach((element, index) => {
-            console.log(`The number is ${index + 1}`)
             let block = document.getElementById(`block${index + 1}`)
             block.textContent = element;
         });
@@ -16,13 +15,26 @@ const gameboard = (() => {
 })();
 
 const displayController = (() => {
-    const blocks = document.querySelectorAll('.block');  
-    
-    //Find nodelist of all blocks, iterate over nodelist and add event listener
-    //X goes first.
+
+    const addListener = () => {
+        const blocks = document.querySelectorAll('.blocks');  
+        blocks.forEach((block) => {
+            if(block.textContent == "") {
+                block.addEventListener('click', function() {updateBlock(block)});
+            }
+        })};
+
+    const updateBlock = ((block) => {
+        blockID = block.id.slice(-1);
+        selectedBlock = document.getElementById(`block${blockID}`);
+        selectedBlock.textContent = "X";
+    });
+
+    return{addListener, updateBlock};
 })();
 
 gameboard.drawBoard();
+displayController.addListener();
 
 
 
