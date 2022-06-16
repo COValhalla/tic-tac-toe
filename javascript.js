@@ -2,7 +2,7 @@
 // Gameboard grid will be stored as an array inside of a gameboard object
 const gameboard = (() => {
     // let gameArray = Array(8);
-    let _gameArray = ['', '','','','','','','',''];
+    let _gameArray = ['', '','','','O','','','',''];
 
     const drawBoard = () => {
         _gameArray.forEach((element, index) => {
@@ -11,7 +11,12 @@ const gameboard = (() => {
         });
     };
 
-    return {drawBoard};
+    const updateGameArray = (block) => {
+        blockID = block.id.slice(-1) -1 ;
+        _gameArray[blockID] = "X"
+    }
+
+    return {drawBoard, updateGameArray};
 })();
 
 const displayController = (() => {
@@ -20,17 +25,14 @@ const displayController = (() => {
         const blocks = document.querySelectorAll('.blocks');  
         blocks.forEach((block) => {
             if(block.textContent == "") {
-                block.addEventListener('click', function() {updateBlock(block)});
+                block.addEventListener('click', function() {
+                    gameboard.updateGameArray(block)
+                    gameboard.drawBoard();
+                });
             }
         })};
 
-    const updateBlock = ((block) => {
-        blockID = block.id.slice(-1);
-        selectedBlock = document.getElementById(`block${blockID}`);
-        selectedBlock.textContent = "X";
-    });
-
-    return{addListener, updateBlock};
+    return{addListener};
 })();
 
 gameboard.drawBoard();
