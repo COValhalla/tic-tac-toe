@@ -26,14 +26,18 @@
     margin-bottom: 10px;
 }
 
-.block1, .block2, .block4, .block5 {
+.block{
+/* Add styling to center X or O and size to fill box  */
+}
+
+#block1, #block2, #block4, #block5 {
     border-bottom: var(--boardBorder);
     border-right: var(--boardBorder);
 }
-.block3, .block6 {
+#block3, #block6 {
     border-bottom: var(--boardBorder);
 }
 
-.block7, .block8 {
+#block7, #block8 {
     border-right: var(--boardBorder);
 }
