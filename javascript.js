@@ -2,7 +2,8 @@
 // Gameboard grid will be stored as an array inside of a gameboard object
 const gameboard = (() => {
     // let gameArray = Array(8);
-    let _gameArray = ['', '','','','O','','','',''];
+    let _gameArray = ['', '','','','','','','',''];
+    let turnControl = 'X';
 
     const drawBoard = () => {
         _gameArray.forEach((element, index) => {
@@ -13,7 +14,13 @@ const gameboard = (() => {
 
     const updateGameArray = (block) => {
         blockID = block.id.slice(-1) -1 ;
-        _gameArray[blockID] = "X"
+        if (turnControl == 'X'){
+            _gameArray[blockID] = "X"
+            turnControl = 'O';
+        } else {
+            _gameArray[blockID] = "O";
+            turnControl = 'X';
+        }
     }
 
     return {drawBoard, updateGameArray};
@@ -28,17 +35,20 @@ const displayController = (() => {
                 block.addEventListener('click', function() {
                     gameboard.updateGameArray(block)
                     gameboard.drawBoard();
-                });
+                }, {once:true});
             }
-        })};
+        })
+    };
 
     return{addListener};
 })();
 
-gameboard.drawBoard();
+
 displayController.addListener();
 
-
+// Initialization. 
+// Add eventListeners, on click gameArray and draw board.
+// No more Player 1 clicks, Player 2 (computer) must select a square
 
 
 
