@@ -1,65 +1,111 @@
-// Gameboard object will store the details of the actual game
-// Gameboard grid will be stored as an array inside of a gameboard object
-const gameboard = (() => {
-    // let gameArray = Array(8);
-    let _gameArray = ['', '','','','','','','',''];
-    let turnControl = 'X';
-
-    const drawBoard = () => {
-        _gameArray.forEach((element, index) => {
-            let block = document.getElementById(`block${index + 1}`)
-            block.textContent = element;
-        });
+// Player factory
+const Player = (name) => {
+    let boardPositions = '';
+    const getName = () => name;
+    const getPositions = () => boardPositions;
+    const updatePositions = (pos) => {
+        boardPositions = boardPositions.concat(pos);
     };
+    return {getName, getPositions, updatePositions};
+};
 
-    const updateGameArray = (block) => {
-        blockID = block.id.slice(-1) -1 ;
-        if (turnControl == 'X'){
-            _gameArray[blockID] = "X"
-            turnControl = 'O';
-        } else {
-            _gameArray[blockID] = "O";
-            turnControl = 'X';
-        }
-    }
 
-    return {drawBoard, updateGameArray};
-})();
+const gameboard = (() => {
+    const playerOne = Player('Player One');
+    const playerTwo = Player('Player Two');
 
-const displayController = (() => {
+    let _gameArray = ['','','','','','','','',''];
+    let winConditions = ['147', '258', '369', '123', '456', '789', '159', '753'];
+
+    const init = () => {
+        addListener();
+        // Will initialize players in the future
+    };
 
     const addListener = () => {
         const blocks = document.querySelectorAll('.blocks');  
         blocks.forEach((block) => {
             if(block.textContent == "") {
                 block.addEventListener('click', function() {
-                    gameboard.updateGameArray(block)
-                    gameboard.drawBoard();
+                    roundLogic(block);
                 }, {once:true});
-            }
-        })
+            };
+        });
     };
 
-    return{addListener};
+    const roundLogic = (block) => {
+        let player = gameLogic.getPlayer();
+        updatePlayerObject(block);
+        checkWin(player);
+        updateGameArray(block)
+        drawGameBoard();
+    };
+
+    const updateGameArray = (block) => {
+        arrayID = block.id.slice(-1)-1;
+
+        if (gameLogic.getTurn() == true){
+            _gameArray[arrayID] = "X"
+            gameLogic.updateTurn();
+        } else {
+            _gameArray[arrayID] = "O";
+            gameLogic.updateTurn();
+        };
+    };
+    
+    const drawGameBoard = () => {
+        _gameArray.forEach((element, index) => {
+            let block = document.getElementById(`block${index + 1}`)
+            block.textContent = element;
+        });
+    };
+
+    const updatePlayerObject = (block) => {
+        let blockID = block.id.slice(-1);
+        if (gameLogic.getTurn() == true) {
+            playerOne.updatePositions(blockID);
+        } else {
+            playerTwo.updatePositions(blockID);
+        };
+    };
+
+    const checkWin = (player) => {
+        if (player == 1) {
+            currentResults = playerOne.getPositions();
+        } else {
+            currentResults = playerTwo.getPositions();
+        };
+
+        
+
+    }
+
+    return {init, drawGameBoard, updateGameArray, updatePlayerObject};
 })();
 
 
-displayController.addListener();
+const gameLogic = (() => {
+    let turnControl = true;
 
-// Initialization. 
-// Add eventListeners, on click gameArray and draw board.
-// No more Player 1 clicks, Player 2 (computer) must select a square
+    const getTurn = () => turnControl;
+    
+    const updateTurn = () => {
+        if (turnControl == true) {
+            turnControl = false;
+        } else {
+            turnControl = true;
+        };
+    };
+    const getPlayer = () => {
+        if (turnControl == true) {
+            return 1;
+        } else {
+            return 2;
+        };
+    };
+    
+    return {getTurn, updateTurn, getPlayer};
 
+})();
 
-
-
-
-
-// Create CSS Grid with 3x3 layout, each grid position corresponds to gameboard grid.
-// Use event listener on the grid to select target square, if square already filled remove event listener
-
-
-
-
-//gameBoard/displayController will be modules, since only one is needed
-//Players will be created using factories (multiples needed)
+gameboard.init();
