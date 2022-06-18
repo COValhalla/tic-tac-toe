@@ -13,8 +13,17 @@ const gameboard = (() => {
   const playerOne = Player('Player One');
   const playerTwo = Player('Player Two');
 
-  let _gameArray = ['', '', '', '', '', '', '', '', ''];
-  let winConditions = ['147', '258', '369', '123', '456', '789', '159', '753'];
+  const _gameArray = ['', '', '', '', '', '', '', '', ''];
+  const winConditions = [
+    '147',
+    '258',
+    '369',
+    '123',
+    '456',
+    '789',
+    '159',
+    '753',
+  ];
 
   const init = () => {
     addListener();
@@ -27,7 +36,7 @@ const gameboard = (() => {
       if (block.textContent == '') {
         block.addEventListener(
           'click',
-          function () {
+          () => {
             roundLogic(block);
           },
           { once: true }
@@ -37,7 +46,7 @@ const gameboard = (() => {
   };
 
   const roundLogic = (block) => {
-    let player = gameLogic.getPlayer();
+    const player = gameLogic.getPlayer();
     updatePlayerObject(block);
     checkWin(player);
     updateGameArray(block);
@@ -58,13 +67,13 @@ const gameboard = (() => {
 
   const drawGameBoard = () => {
     _gameArray.forEach((element, index) => {
-      let block = document.getElementById(`block${index + 1}`);
+      const block = document.getElementById(`block${index + 1}`);
       block.textContent = element;
     });
   };
 
   const updatePlayerObject = (block) => {
-    let blockID = block.id.slice(-1);
+    const blockID = block.id.slice(-1);
     if (gameLogic.getTurn() == true) {
       playerOne.updatePositions(blockID);
     } else {
@@ -80,11 +89,16 @@ const gameboard = (() => {
     }
 
     winConditions.forEach((condition) => {
-      console.log('Condition: ' + condition + '  Result: ' + currentResults);
+      console.log(`Condition: ${condition}  Result: ${currentResults}`);
     });
   };
 
-  return { init, drawGameBoard, updateGameArray, updatePlayerObject };
+  return {
+    init,
+    drawGameBoard,
+    updateGameArray,
+    updatePlayerObject,
+  };
 })();
 
 const gameLogic = (() => {
@@ -93,18 +107,17 @@ const gameLogic = (() => {
   const getTurn = () => turnControl;
 
   const updateTurn = () => {
-    if (turnControl == true) {
+    if (turnControl) {
       turnControl = false;
     } else {
       turnControl = true;
     }
   };
   const getPlayer = () => {
-    if (turnControl == true) {
+    if (turnControl) {
       return 1;
-    } else {
-      return 2;
     }
+    return 2;
   };
 
   return { getTurn, updateTurn, getPlayer };
