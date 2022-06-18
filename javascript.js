@@ -66,9 +66,18 @@ const gameboard = (() => {
       currentResults = playerTwo.getPositions();
     }
 
-    winConditions.forEach((condition) => {
-      console.log(`Condition: ${condition}  Result: ${currentResults}`);
-    });
+    // eslint-disable-next-line no-restricted-syntax
+    for (const winCond of winConditions) {
+      let winCount = 0;
+      for (let i = 0; i < currentResults.length; i += 1) {
+        if (winCond.includes(currentResults[i])) {
+          winCount += 1;
+        }
+      }
+      if (winCount === 3) {
+        endGame(player);
+      }
+    }
   };
 
   const updateGameArray = (block) => {
@@ -116,6 +125,10 @@ const gameboard = (() => {
   const init = () => {
     addListener();
     // Will initialize players in the future
+  };
+
+  const endGame = (player) => {
+    alert(`Game over! Player ${player} wins!`);
   };
 
   return {
