@@ -76,6 +76,10 @@ const gameboard = (() => {
       }
       if (winCount === 3) {
         endGame(player);
+        break;
+      } else if (currentResults.length === 5 && winCount < 3) {
+        alert('tie');
+        break;
       }
     }
   };
@@ -128,6 +132,9 @@ const gameboard = (() => {
   };
 
   const endGame = (player) => {
+    // Update display with results
+    // Highlight the winning columns with a slightly different style
+    // Need to add draw logic in the appropriate place
     alert(`Game over! Player ${player} wins!`);
   };
 
