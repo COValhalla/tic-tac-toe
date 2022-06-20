@@ -69,16 +69,18 @@ const gameboard = (() => {
     // eslint-disable-next-line no-restricted-syntax
     for (const winCond of winConditions) {
       let winCount = 0;
+      let result;
       for (let i = 0; i < currentResults.length; i += 1) {
         if (winCond.includes(currentResults[i])) {
           winCount += 1;
         }
       }
       if (winCount === 3) {
-        endGame(player);
+        endGame(player, result);
         break;
       } else if (currentResults.length === 5 && winCount < 3) {
-        alert('tie');
+        result = 'tie';
+        endGame(player, result);
         break;
       }
     }
@@ -131,11 +133,17 @@ const gameboard = (() => {
     // Will initialize players in the future
   };
 
-  const endGame = (player) => {
+  const endGame = (player, result) => {
     // Update display with results
+    const displayResults = document.getElementById('resultsDisplay');
+    if (result === 'tie') {
+      displayResults.textContent = 'Game Over! Tie game!';
+    } else {
+      displayResults.textContent = `Game Over! Player ${player} wins!`;
+    }
+
     // Highlight the winning columns with a slightly different style
     // Need to add draw logic in the appropriate place
-    alert(`Game over! Player ${player} wins!`);
   };
 
   return {
