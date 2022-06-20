@@ -186,6 +186,8 @@ const gameboard = (() => {
       displayResults.textContent = `Game Over! Player ${player} wins!`;
     }
 
+    removeListeners();
+
     // Highlight the winning columns with a slightly different style
     // Need to add draw logic in the appropriate place
   };
