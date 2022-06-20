@@ -6,13 +6,24 @@ const Player = (name) => {
   const updatePositions = (pos) => {
     boardPositions = boardPositions.concat(pos);
   };
-  return { getName, getPositions, updatePositions };
+  const resetPositions = () => {
+    boardPositions = '';
+  };
+  return {
+    getName,
+    getPositions,
+    updatePositions,
+    resetPositions,
+  };
 };
 
 // Returns and updates turn. Returns current player.
 const gameLogic = (() => {
   let turnControl = true;
 
+  const resetTurn = () => {
+    turnControl = true;
+  };
   const getTurn = () => turnControl;
 
   const updateTurn = () => {
@@ -29,7 +40,12 @@ const gameLogic = (() => {
     return 2;
   };
 
-  return { getTurn, updateTurn, getPlayer };
+  return {
+    getTurn,
+    updateTurn,
+    getPlayer,
+    resetTurn,
+  };
 })();
 
 const gameboard = (() => {
@@ -37,7 +53,7 @@ const gameboard = (() => {
   const playerTwo = Player('Player Two');
 
   // eslint-disable-next-line no-underscore-dangle
-  const _gameArray = ['', '', '', '', '', '', '', '', ''];
+  let _gameArray = ['', '', '', '', '', '', '', '', ''];
   const winConditions = [
     '147',
     '258',
@@ -88,7 +104,6 @@ const gameboard = (() => {
 
   const updateGameArray = (block) => {
     const arrayID = block.id.slice(-1) - 1;
-
     if (gameLogic.getTurn() === true) {
       _gameArray[arrayID] = 'X';
       gameLogic.updateTurn();
@@ -128,8 +143,37 @@ const gameboard = (() => {
     });
   };
 
-  const init = () => {
+  const removeListeners = () => {
+    const blocks = document.querySelectorAll('.blocks');
+    blocks.forEach((block) => {
+      block.replaceWith(block.cloneNode(true));
+    });
+  };
+
+  const resetDisplay = () => {
+    const displayResults = document.getElementById('resultsDisplay');
+    displayResults.textContent = '';
+  };
+  const restartGame = () => {
+    _gameArray = ['', '', '', '', '', '', '', '', ''];
+    drawGameBoard();
+    resetDisplay();
+    gameLogic.resetTurn();
+    removeListeners();
+
     addListener();
+
+    playerOne.resetPositions();
+    playerTwo.resetPositions();
+  };
+
+  const init = () => {
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', addListener);
+
+    const restartButton = document.getElementById('restartButton');
+    restartButton.addEventListener('click', restartGame);
+
     // Will initialize players in the future
   };
 
